@@ -1,13 +1,17 @@
 ﻿<CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <img src="/images/naoautorizado1.jpg" width="400" height="300" />
+                </NotAuthorized>
+            </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
         <NotFound>
             <PageTitle>Not found</PageTitle>
             <LayoutView Layout="@typeof(MainLayout)">
-                <p role="alert">Sorry, there's nothing at this address.</p>
+                <p role="alert">Não foi localizado um componente para esta rota.</p>
             </LayoutView>
         </NotFound>
     </Router>
