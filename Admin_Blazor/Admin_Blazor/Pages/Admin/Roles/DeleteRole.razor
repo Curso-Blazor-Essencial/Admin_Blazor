@@ -1,0 +1,92 @@
+﻿@page "/deleterole/{id:guid}"
+
+@inject NavigationManager NavigationManager
+@inject IRoleService roleService
+@inject IWebHostEnvironment Env
+
+<h2>Confirma Exclusão ?</h2>
+<p>Deseja realmente deletar este Perfil com Id: <b> @id</b></p>
+<br />
+
+<Alerta Exibir="Exibir">
+    <strong>@Mensagem</strong>
+</Alerta>
+
+<div class="col-md-8">
+    <table class="table">
+        <tr>
+            <td>Nome</td>
+            <td>@role.Name</td>
+        </tr>
+        <tr>
+            <td>Nome Normalizado</td>
+            <td>@role.NormalizedName</td>
+        </tr>
+        <tr>
+            <td>ConcurrencyStamp</td>
+            <td>@role.ConcurrencyStamp</td>
+        </tr>
+    </table>
+    <div class="form-group">
+        <input type="button" value="Deletar" @onclick="@Delete" class="btn btn-primary" />
+        <input type="button" value="Cancelar" @onclick="@Cancel" class="btn" />
+    </div>
+</div>
+
+@code {
+    bool Exibir = false;
+
+    [Parameter]
+    public string Mensagem { get; set; }
+
+    [Parameter]
+    public Guid id { get; set; }
+
+    Role role = new Role();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            role = await roleService.GetRole(id);
+        }
+        catch (Exception ex)
+        {
+            Exibir = true;
+            if (Env.IsDevelopment())
+            {
+                Mensagem = "Erro ao acessar os dados ...\n" + ex.StackTrace.ToString();
+            }
+            else
+            {
+                Mensagem = "Não foi possível acessar o perfil do usuário ...";
+            }
+        }
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("roles");
+    }
+
+    protected async Task Delete()
+    {
+        try
+        {
+            await roleService.DeleteRole(id);
+            NavigationManager.NavigateTo("roles");
+        }
+        catch (Exception ex)
+        {
+            Exibir = true;
+            if (Env.IsDevelopment())
+            {
+                Mensagem = "Erro ao acessar os dados ...\n" + ex.StackTrace.ToString();
+            }
+            else
+            {
+                Mensagem = "Não foi possível excluir o perfil do usuário ...";
+            }
+        }
+    }
+}
