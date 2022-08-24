@@ -82,12 +82,12 @@ namespace Admin_Blazor.Data.Services
             try
             {
                 List<User> users = new List<User>();
-                using (SqlConnection con = new SqlConnection(_configuration.ConnectionString))
+                using (SqlConnection con = new
+                    SqlConnection(_configuration.ConnectionString))
                 {
                     const string query = "select * from dbo.AspNetUsers";
                     SqlCommand cmd = new SqlCommand(query, con)
                     {
-                        //verificar aqui depois
                         CommandType = CommandType.Text
                     };
 

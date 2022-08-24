@@ -1,0 +1,74 @@
+﻿@page "/users"
+@inject IUserService userService
+@inject IWebHostEnvironment Env
+
+<h2> Usuários </h2>
+
+<Alerta Exibir="Exibir">
+    <h3>@Mensagem</h3>
+</Alerta>
+
+@if (users == null)
+{
+    <img src="~/images/basicloader.gif" />
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.Id </td>
+                    <td>@user.UserName </td>
+                    <td>@user.Email </td>
+                    <td>
+                        <a href=" "> Novo Perfil</a>
+                        <a href=" "> Deletar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+    List<User> users;
+
+    bool Exibir = false;
+
+    [Parameter]
+    public string Mensagem { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            users = await userService.GetUsers();
+        }
+        catch (Exception ex)
+        {
+            Exibir = true;
+            if (Env.IsDevelopment())
+            {
+                Mensagem = "Erro ao acessar os dados... \n" + ex.StackTrace.ToString();
+            }
+            else
+            {
+                Mensagem = "Não foio possível acessar os dados dos perfis do usuário... " + ex.InnerException.ToString();
+            }
+        }
+
+    }
+
+}
+
