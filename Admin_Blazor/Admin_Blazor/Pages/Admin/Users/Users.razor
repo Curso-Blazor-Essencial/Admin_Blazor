@@ -32,7 +32,7 @@ else
                     <td>@user.Email </td>
                     <td>
                         <a href=" "> Novo Perfil</a>
-                        <a href=" "> Deletar</a>
+                        <a href="/deleteuser/@user.Id"> Deletar</a>
                     </td>
                 </tr>
             }
@@ -64,11 +64,10 @@ else
             }
             else
             {
-                Mensagem = "Não foio possível acessar os dados dos perfis do usuário... " + ex.InnerException.ToString();
+                Mensagem = "Não foio possível acessar os dados dos perfis do usuário... " + ex.StackTrace.ToString();
             }
         }
-
+        
     }
 
 }
-
