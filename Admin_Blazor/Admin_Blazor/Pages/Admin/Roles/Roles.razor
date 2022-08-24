@@ -1,14 +1,19 @@
-﻿@page "/users"
-@inject IUserService userService
+﻿@page "/roles"
+
+@inject IRoleService roleService
 @inject IWebHostEnvironment Env
 
-<h2>Usuários</h2>
+<h2>Roles</h2>
+
+<p>
+    <a href="/addrole">Cria novo Perfil</a>
+</p>
 
 <Alerta Exibir="Exibir">
     <h3>@Mensagem</h3>
 </Alerta>
 
-@if (users == null)
+@if (roles == null)
 {
     <img src="/images/basicloader.gif" />
 }
@@ -19,20 +24,21 @@ else
             <tr>
                 <th>Id</th>
                 <th>Nome</th>
-                <th>Email</th>
-                <th></th>
+                <th>Normalizado</th>
+                <th>TimeStamp</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var user in users)
+            @foreach (var role in roles)
             {
                 <tr>
-                    <td>@user.Id</td>
-                    <td>@user.UserName</td>
-                    <td>@user.Email</td>
+                    <td>@role.Id</td>
+                    <td>@role.Name</td>
+                    <td>@role.NormalizedName</td>
+                    <td>@role.ConcurrencyStamp</td>
                     <td>
-                        <a href='/addroleuser/@user.Id'>Novo Perfil</a>
-                        <a href='/deleteuser/@user.Id'>Deletar</a>
+                        <a href='/editrole/@role.Id'>Editar</a>
+                        <a href='/deleterole/@role.Id'>Deleta</a>
                     </td>
                 </tr>
             }
@@ -40,9 +46,9 @@ else
     </table>
 }
 
-@code {
-    List<User> users;
 
+@code {
+    List<Role> roles;
     bool Exibir = false;
 
     [Parameter]
@@ -52,7 +58,7 @@ else
     {
         try
         {
-            users = await userService.GetUsers();
+            roles = await roleService.GetRoles();
         }
         catch (Exception ex)
         {
@@ -63,7 +69,7 @@ else
             }
             else
             {
-                Mensagem = "Não foi possível ao acessar os dados dos perfis do usuário ..." + ex.InnerException.ToString();
+                Mensagem = "Não foi possível ao acessar os dados dos perfis do usuário ...";
             }
         }
     }

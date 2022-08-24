@@ -1,0 +1,132 @@
+﻿@page "/addroleuser/{id:guid}"
+
+@inject NavigationManager NavigationManager
+@inject IRoleService roleService
+@inject IUserService userService
+@inject IWebHostEnvironment Env
+
+
+<h2>Atribui Perfil ao usuário</h2>
+
+<br>
+<Alerta Exibir="Exibir">
+    <b> @Mensagem</b>
+</Alerta>
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label class="control-label">Id</label>
+                <input class="form-control" @bind="@user.Id" disabled />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Nome</label>
+                <input class="form-control" @bind="@user.UserName" disabled />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Email</label>
+                <input class="form-control" @bind="@user.Email" disabled />
+            </div>
+            <div class="form-group">
+                <label form="categoria">Roles: </label>
+                <select @onchange="RoleSelectionChanged" class="form-control">
+                    @if (roles != null)
+                    {
+                        @foreach (var role in roles)
+                        {
+                            <option value="@role.Id">
+                                @role.Name
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <input type="button" class="btn btn-primary" @onclick="@UpdateRole" value="Atribui Perfil ao Usuário" />
+            <input type="button" class="btn" @onclick="@Cancel" value="Cancelar" />
+        </div>
+    </div>
+</form>
+
+
+@code {
+    List<Role> roles;
+    User user = new User();
+
+    bool Exibir = false;
+    [Parameter]
+    public string Mensagem { get; set; }
+
+    [Parameter]
+    public Guid id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            user = await userService.GetUser(id);
+            await LoadRoles();
+        }
+        catch (Exception ex)
+        {
+            Exibir = true;
+            if (Env.IsDevelopment())
+            {
+                Mensagem = "Erro ao acessar os dados ...\n"
+                    + ex.StackTrace.ToString() + "\n\n " + ex.Message;
+            }
+            else
+            {
+                Mensagem = "Não foi possível ao acessar os dados do perfil do usuário ...";
+            }
+        }
+    }
+
+    private async Task LoadRoles()
+    {
+        roles = await roleService.GetRoles();
+        user.RoleId = roles[0].Id;
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("users");
+    }
+
+    void RoleSelectionChanged(ChangeEventArgs e)
+    {
+        if (Guid.TryParse(e.Value.ToString(), out Guid id))
+        {
+            user.RoleId = id;
+        }
+    }
+
+    public async Task UpdateRole()
+    {
+        try
+        {
+            await userService.UpdateUserRole(id, user);
+            Exibir = true;
+            Mensagem = $"O Perfil foi Atribuido ao usuário : {user.UserName} com sucesso";
+            //NavigationManager.NavigateTo("users");
+        }
+        catch (Exception ex)
+        {
+            Exibir = true;
+            if (Env.IsDevelopment())
+            {
+                Mensagem = "Erro ao atribuir perfil ao usuário...\n"
+                    + ex.StackTrace.ToString() + "\n\n " + ex.Message;
+            }
+            else
+            {
+                Mensagem = "Não foi possível atribuir o novo perfil ao usuário, verifique se o perfil já existe...";
+            }
+        }
+    }
+
+}

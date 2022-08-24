@@ -19,6 +19,14 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Usuario/Documents/GitHub/Admin_Blazor/Admin_Blazor/Admin_Blazor/Pages/Admin/Roles/Roles.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cUm9sZXNcUm9sZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Usuario/Documents/GitHub/Admin_Blazor/Admin_Blazor/Admin_Blazor/Pages/Admin/Users/AddRoleUser.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cVXNlcnNcQWRkUm9sZVVzZXIucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Usuario/Documents/GitHub/Admin_Blazor/Admin_Blazor/Admin_Blazor/Pages/Admin/Users/DeleteUser.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cVXNlcnNcRGVsZXRlVXNlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
